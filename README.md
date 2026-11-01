@@ -88,7 +88,14 @@ Send the token as `Authorization: Bearer <token>`.
 3. Set `PRODUCTION_API` in `Front-end/config.js` to the Render address plus `/api`.
 
 ## Screenshots
+<img width="959" height="431" alt="Screenshot 2026-11-01 104620" src="https://github.com/user-attachments/assets/1d3e760c-6a7c-480d-8753-495d8c1ca880" />
+<img width="959" height="431" alt="Screenshot 2026-11-01 104633" src="https://github.com/user-attachments/assets/7ab520f0-9dd2-4108-93a7-efe31155ef73" />
+<img width="959" height="433" alt="Screenshot 2026-11-01 104641" src="https://github.com/user-attachments/assets/9b2c127b-f0d2-4847-a501-bcede2efb124" />
+<img width="959" height="433" alt="Screenshot 2026-11-01 104651" src="https://github.com/user-attachments/assets/93458773-f0c2-4a4d-9fd4-6e931f847fdd" />
+
 <img width="959" height="239" alt="Screenshot 2026-11-01 104705" src="https://github.com/user-attachments/assets/3bcf4447-0dde-487f-814b-eb5ff66a2832" />
+<img width="959" height="429" alt="Screenshot 2026-11-01 104725" src="https://github.com/user-attachments/assets/1e2b8bf3-c937-4b3d-9cbc-c7f290f0fff4" />
+
 <img width="959" height="429" alt="Screenshot 2026-11-01 104733" src="https://github.com/user-attachments/assets/53397801-8cf4-409f-9679-f256892dc577" />
 
 

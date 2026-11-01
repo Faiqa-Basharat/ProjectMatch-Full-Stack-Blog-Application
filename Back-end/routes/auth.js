@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
 const makeToken = (id) =>
@@ -49,6 +50,17 @@ router.post('/login', async (req, res) => {
       token: makeToken(user._id),
       user: { name: user.name, email: user.email }
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error. Please try again.' });
+  }
+});
+// GET /api/auth/me  (returns the logged-in user's account details)
+router.get('/me', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('name email createdAt');
+    if (!user) return res.status(401).json({ message: 'Account not found. Please log in again.' });
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error. Please try again.' });

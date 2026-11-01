@@ -11,6 +11,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.send('ProjectMatch API is running'));
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/blogs', require('./routes/blogs'));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

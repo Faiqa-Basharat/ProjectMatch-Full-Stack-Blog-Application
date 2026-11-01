@@ -19,6 +19,62 @@ renderNav('blogs.html');
 var box = document.getElementById('post');
 var id = new URLSearchParams(location.search).get('id');
 
+function show(b) {
+  document.title = b.title + ' - ProjectMatch';
+  box.textContent = '';
+  var h = document.createElement('h1');
+  h.textContent = b.title;
+  var meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = 'By ' + (b.author && b.author.name ? b.author.name : 'Unknown') + ' · ' + fmtDate(b.createdAt);
+  var tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.textContent = b.category || 'Other';
+  meta.appendChild(tag);
+  var body = document.createElement('div');
+  body.className = 'body';
+  body.textContent = b.content;
+  box.appendChild(h); box.appendChild(meta); box.appendChild(body);
+
+  // Edit / Delete only for the author (the server checks this again)
+  if (b.author && b.author._id && b.author._id === myId()) {
+    var tools = document.createElement('div');
+    tools.className = 'tools';
+    var edit = document.createElement('a');
+    edit.className = 'btn btn-ghost';
+    edit.href = 'write.html?id=' + encodeURIComponent(b._id);
+    edit.textContent = 'Edit';
+    var del = document.createElement('button');
+    del.className = 'btn btn-danger';
+    del.type = 'button';
+    del.textContent = 'Delete';
+    del.addEventListener('click', function () { removeBlog(b._id, del); });
+    tools.appendChild(edit); tools.appendChild(del);
+    box.appendChild(tools);
+  }
+}
+
+async function removeBlog(blogId, btn) {
+  if (!confirm('Delete this blog? This cannot be undone.')) return;
+  btn.disabled = true;
+  try {
+    var res = await fetch(API + '/blogs/' + encodeURIComponent(blogId), {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + getToken() }
+    });
+    if (!res.ok) {
+      var data = await res.json();
+      alert(data.message || 'Could not delete this blog.');
+      btn.disabled = false;
+      return;
+    }
+    location.href = 'blogs.html';
+  } catch (e) {
+    alert('Cannot reach the server. Is it running?');
+    btn.disabled = false;
+  }
+}
+
 if (!id) {
   box.innerHTML = '<p class="msg">No blog selected.</p>';
 } else {
@@ -28,19 +84,7 @@ if (!id) {
       if (!r.ok) throw new Error('bad response');
       return r.json();
     })
-    .then(function (b) {
-      document.title = b.title + ' - ProjectMatch';
-      box.textContent = '';
-      var h = document.createElement('h1');
-      h.textContent = b.title;
-      var meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.textContent = 'By ' + (b.author && b.author.name ? b.author.name : 'Unknown') + ' · ' + fmtDate(b.createdAt);
-      var body = document.createElement('div');
-      body.className = 'body';
-      body.textContent = b.content;
-      box.appendChild(h); box.appendChild(meta); box.appendChild(body);
-    })
+    .then(show)
     .catch(function (e) {
       box.innerHTML = e.message === 'missing'
         ? '<p class="msg">This blog does not exist.</p>'

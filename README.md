@@ -88,8 +88,10 @@ Send the token as `Authorization: Bearer <token>`.
 3. Set `PRODUCTION_API` in `Front-end/config.js` to the Render address plus `/api`.
 
 ## Screenshots
+<img width="959" height="239" alt="Screenshot 2026-11-01 104705" src="https://github.com/user-attachments/assets/3bcf4447-0dde-487f-814b-eb5ff66a2832" />
+<img width="959" height="429" alt="Screenshot 2026-11-01 104733" src="https://github.com/user-attachments/assets/53397801-8cf4-409f-9679-f256892dc577" />
 
-_Add screenshots of the login page, blog list, blog detail and dashboard here._
+
 
 ## Author
 

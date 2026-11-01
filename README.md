@@ -1,99 +1,96 @@
-# CodeMax – Full Stack Web Development Internship
+# ProjectMatch – Full Stack Blog Application
 
-Welcome to my **Full Stack Web Development Internship** journey at **CodeMax**!
+A full stack web app where students register, log in, and write, edit, search and manage blog posts. Built during the Codomax internship.
 
-This repository documents my learning, development tasks, practical implementations, and projects throughout the internship. The primary goal is to strengthen my full stack development skills by working with modern web technologies and building functional, database-driven applications.
+**Live demo:** _add your Netlify/Vercel link here_
+**API:** _add your Render link here_
 
-## About the Internship
+## Features
 
-As a Full Stack Web Development Intern at CodeMax, I am expanding my knowledge of both frontend and backend development while gaining hands-on experience in building complete web applications.
+- **Authentication:** register and log in with JWT; passwords are hashed with bcrypt
+- **Blog CRUD:** create, read, update and delete blogs (only the author can edit or delete)
+- **Search and categories:** filter blogs by keyword and category
+- **Private dashboard:** shows only the logged-in user's blogs, with stats and account details
+- **Profile and logout:** account details, editable bio and skills, and a logout that clears the session
+- **Responsive UI:** works on phones, tablets and desktops, with a fixed navigation bar
 
-Throughout this internship, I will be working on:
+## Tech stack
 
-- **Frontend Development:** Creating responsive and interactive user interfaces.
-- **Backend Development:** Developing server-side logic and application functionality.
-- **Database Integration:** Connecting applications with databases and managing data.
-- **CRUD Operations:** Implementing Create, Read, Update, and Delete functionalities.
-- **Authentication:** Understanding user registration, login, and secure access.
-- **Dashboard Development:** Building functional and dynamic dashboards.
-- **API Development:** Working with REST APIs and handling client-server communication.
-- **Version Control:** Managing projects using Git and GitHub.
-
-## Technologies & Tools
-
-The internship focuses on learning and applying the following technologies:
-
-| Category | Technologies |
+| Layer | Technology |
 |---|---|
-| Frontend | HTML5, CSS3, JavaScript |
+| Frontend | HTML, CSS, vanilla JavaScript |
 | Backend | Node.js, Express.js |
-| Database | MongoDB |
-| API | REST APIs |
-| Version Control | Git & GitHub |
-| Development Tools | VS Code, Postman |
+| Database | MongoDB Atlas with Mongoose |
+| Auth | JSON Web Tokens, bcryptjs |
+| Hosting | Render (API), Netlify or Vercel (frontend) |
 
-## Internship Project – ProjectMatch
+## Project structure
 
-**ProjectMatch** is my primary full stack development project, which I am building as part of this internship.
+```
+Codomax-Internship/
+├── Back-end/
+│   ├── middleware/auth.js     # checks the JWT on private routes
+│   ├── models/                # User and Blog schemas
+│   ├── routes/                # auth and blogs endpoints
+│   ├── server.js
+│   └── .env.example
+└── Front-end/
+    ├── index.html, login.html, register.html
+    ├── dashboard.html, profile.html, explore.html
+    ├── blogs.html, blog.html, write.html
+    └── config.js, site.css, auth.css, blog.css, blog-common.js
+```
 
-The idea behind ProjectMatch is to develop a web-based platform that helps students discover potential project collaborators and connect with people who share similar interests, skills, and academic goals.
+## Run it locally
 
-The project will allow me to apply the concepts I learn during the internship in a practical, real-world development environment.
+**Requirements:** Node.js 18+ and a free MongoDB Atlas cluster.
 
-### Project Objectives
+```bash
+cd Back-end
+npm install
+cp .env.example .env      # then fill in your own values
+npm run dev
+```
 
-- Develop a complete full stack web application.
-- Design a responsive and user-friendly interface.
-- Implement frontend and backend integration.
-- Work with MongoDB for database management.
-- Implement CRUD operations.
-- Explore user authentication and authorization.
-- Develop and integrate REST APIs.
-- Practice clean code structure and project organization.
+The API runs at `http://localhost:5000`. Open `Front-end/index.html` with a local server such as VS Code Live Server.
 
-### Development Stack
+### Environment variables (`Back-end/.env`)
 
-- HTML,CSS & Javascript – Frontend
-- Node.js – Backend runtime
-- Express.js – Backend framework
-- MongoDB – Database
-- REST APIs – Frontend and backend communication
+| Name | Description |
+|---|---|
+| `PORT` | Port for the API (default 5000) |
+| `MONGO_URI` | MongoDB Atlas connection string, ending in `/projectmatch` |
+| `JWT_SECRET` | Long random text used to sign login tokens |
+| `FRONTEND_URL` | Deployed frontend address (production only, enables CORS for it) |
 
-*ProjectMatch is currently under development as part of my internship learning journey.*
+Never commit `.env`; it is listed in `.gitignore`.
 
-## Learning Goals
+## API endpoints
 
-By the end of this internship, I aim to:
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | No | Create an account, returns a token |
+| POST | `/api/auth/login` | No | Log in, returns a token |
+| GET | `/api/auth/me` | Yes | Current user's account details |
+| GET | `/api/blogs` | No | All blogs (`?search=` and `?category=` filters) |
+| GET | `/api/blogs/mine` | Yes | Only the logged-in user's blogs |
+| GET | `/api/blogs/:id` | No | One blog |
+| POST | `/api/blogs` | Yes | Create a blog |
+| PUT | `/api/blogs/:id` | Yes (author) | Update a blog |
+| DELETE | `/api/blogs/:id` | Yes (author) | Delete a blog |
 
-- Build a strong foundation in full stack web development.
-- Gain practical experience with React.js, Node.js, and Express.js.
-- Understand database design and integration.
-- Develop secure authentication systems.
-- Build and consume REST APIs.
-- Improve debugging, problem-solving, and development workflows.
-- Gain confidence in developing and deploying complete web applications.
+Send the token as `Authorization: Bearer <token>`.
 
-## Repository Structure
+## Deployment
 
-This repository will be updated as I progress through the internship, including practical tasks, learning exercises, and project implementations.
+1. **Backend (Render):** Web Service, root directory `Back-end`, build `npm install`, start `npm start`, and add the environment variables above.
+2. **Frontend (Netlify or Vercel):** publish the `Front-end` folder.
+3. Set `PRODUCTION_API` in `Front-end/config.js` to the Render address plus `/api`.
 
-## About Me
+## Screenshots
 
-I am an IT student passionate about **Frontend Development, UI/UX Design, and Full Stack Web Development**. With previous experience in frontend development and UI/UX design, I am now expanding my technical skill set towards backend development and database-driven applications.
+_Add screenshots of the login page, blog list, blog detail and dashboard here._
 
-This internship is an important step in my journey towards becoming a skilled full stack web developer.
+## Author
 
-**Connect with me:**
-
-- **LinkedIn:** [https://www.linkedin.com/in/faiqa-basharat-179707362/]
-- **GitHub:** [https://github.com/Faiqa-Basharat]
-- **Portfolio:** [My Portfolio](https://faiqa-basharat-portfolio.vercel.app/)
-- **Behance:** [My Behance](https://www.behance.net/faiqabasharat05)
-
----
-
-*Learning, building, experimenting, and growing — one project at a time.*
-
-**Internship:** CodeMax  
-**Role:** Full Stack Web Development Intern  
-**Featured Project:** ProjectMatch
+**Faiqa Basharat** – Codomax internship project

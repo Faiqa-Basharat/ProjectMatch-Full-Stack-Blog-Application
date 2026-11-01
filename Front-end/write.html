@@ -10,10 +10,11 @@
 <body>
 <div id="site-nav"></div>
 <main class="wrap">
-  <h1>Write a blog</h1>
+  <h1 id="heading">Write a blog</h1>
   <p class="sub">Share an idea, a lesson, or a project update.</p>
   <form id="f" novalidate>
     <div class="field"><label for="title">Title</label><input id="title" maxlength="120" placeholder="Give your blog a title"></div>
+    <div class="field"><label for="category">Category</label><select id="category"></select></div>
     <div class="field"><label for="content">Content</label><textarea id="content" placeholder="Write your blog here..."></textarea></div>
     <p class="err" id="err" role="alert"></p>
     <button class="btn" id="go" type="submit">Publish</button>
@@ -22,23 +23,43 @@
 <script src="blog-common.js"></script>
 <script>
 renderNav('write.html');
-var token = localStorage.getItem('pm_token');
+var token = getToken();
 if (!token) location.href = 'login.html';
+
+var editId = new URLSearchParams(location.search).get('id');   // present when editing
+var err = document.getElementById('err'), btn = document.getElementById('go');
+fillCategories(document.getElementById('category'));
+document.getElementById('category').value = 'Other';
+
+if (editId) {
+  document.getElementById('heading').textContent = 'Edit blog';
+  btn.textContent = 'Save changes';
+  fetch(API + '/blogs/' + encodeURIComponent(editId))
+    .then(function (r) { if (!r.ok) throw new Error('missing'); return r.json(); })
+    .then(function (b) {
+      if (!b.author || b.author._id !== myId()) { err.textContent = 'You can only edit your own blogs.'; btn.disabled = true; return; }
+      document.getElementById('title').value = b.title;
+      document.getElementById('category').value = b.category || 'Other';
+      document.getElementById('content').value = b.content;
+    })
+    .catch(function () { err.textContent = 'Could not load this blog.'; btn.disabled = true; });
+}
 
 document.getElementById('f').addEventListener('submit', async function (e) {
   e.preventDefault();
   var title = document.getElementById('title').value.trim();
   var content = document.getElementById('content').value.trim();
-  var err = document.getElementById('err'), btn = document.getElementById('go');
+  var category = document.getElementById('category').value;
   err.textContent = '';
   if (!title || !content) { err.textContent = 'Please add a title and some content.'; return; }
 
-  btn.disabled = true; btn.textContent = 'Publishing...';
+  var label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving...';
   try {
-    var res = await fetch(API + '/blogs', {
-      method: 'POST',
+    var res = await fetch(API + '/blogs' + (editId ? '/' + encodeURIComponent(editId) : ''), {
+      method: editId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ title: title, content: content })
+      body: JSON.stringify({ title: title, content: content, category: category })
     });
     var data = await res.json();
     if (res.status === 401) {
@@ -51,7 +72,7 @@ document.getElementById('f').addEventListener('submit', async function (e) {
   } catch (x) {
     err.textContent = 'Cannot reach the server. Is it running?';
   } finally {
-    btn.disabled = false; btn.textContent = 'Publish';
+    btn.disabled = false; btn.textContent = label;
   }
 });
 </script>
